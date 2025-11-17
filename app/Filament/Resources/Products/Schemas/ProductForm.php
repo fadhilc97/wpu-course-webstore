@@ -19,7 +19,7 @@ class ProductForm
             TextInput::make('stock')->numeric()->default(0),
             TextInput::make('price')->numeric()->prefix('Rp'),
             TextInput::make('weight')->numeric()->suffix('gram')
-          ])
+          ])->columnSpanFull()
       ]);
   }
 }
