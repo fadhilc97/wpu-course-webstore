@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Products\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class ProductsTable
@@ -13,7 +14,11 @@ class ProductsTable
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('name'),
+                TextColumn::make('sku'),
+                TextColumn::make('weight'),
+                TextColumn::make('stock'),
+                TextColumn::make('price'),
             ])
             ->filters([
                 //
