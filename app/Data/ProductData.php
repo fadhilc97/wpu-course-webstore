@@ -19,24 +19,27 @@ class ProductData extends Data
     public string $sku,
     public string $slug,
     public string|Optional|null $description,
+    public string $short_desc,
     public int $stock,
     public float $price,
     public int $weight,
-    public string $cover_url
+    public string $cover_url,
   ) {
     $this->price_formatted = Number::currency($price, 'IDR');
   }
 
   public static function fromModel(Product $product): self {
+
     return new self(
       $product->name,
       $product->sku,
       $product->slug,
       $product->description,
+      $product->tags()->where('type', 'collection')->pluck('name')->implode(', '),
       $product->stock,
       floatval($product->price),
       $product->weight,
-      $product->getFirstMediaUrl('cover')
+      $product->getFirstMediaUrl('cover'),
     );
   }
 }

@@ -6,7 +6,7 @@
       {{ $product->name }}
     </h3>
     <span class="text-sm text-gray-500">
-      Ebook, Software Engineer, Web Developer
+      {{ $product->short_desc }}
     </span>
     <p class="mt-1 font-semibold text-black dark:text-black">
       {{ $product->price_formatted }}
