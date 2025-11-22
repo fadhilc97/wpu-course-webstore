@@ -15,8 +15,8 @@ class ProductForm
     return $schema
       ->components([
           Section::make()->schema([
-            SpatieMediaLibraryFileUpload::make('cover')->collection('cover'),
-            SpatieMediaLibraryFileUpload::make('gallery')->collection('gallery')->multiple(),
+            SpatieMediaLibraryFileUpload::make('cover')->collection('cover')->disk('public'),
+            SpatieMediaLibraryFileUpload::make('gallery')->collection('gallery')->multiple()->disk('public'),
             TextInput::make('name')->label('Product Name'),
             TextInput::make('sku')->label('SKU')->unique(),
             TextInput::make('slug')->unique(),
