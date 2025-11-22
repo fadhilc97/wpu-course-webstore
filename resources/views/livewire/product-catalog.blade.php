@@ -64,8 +64,8 @@
           @empty
             <div class="col-span-full">Product not found</div>
           @endforelse
-
         </div>
+        {{ $products->links() }}
       </div>
     </div>
   </div>
