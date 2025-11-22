@@ -2,18 +2,22 @@
 
 namespace App\Livewire;
 
+use App\Data\ProductCollectionData;
 use App\Data\ProductData;
 use App\Models\Product;
+use App\Models\Tag;
 use Livewire\Component;
 
 class ProductCatalog extends Component
 {
   public function render()
   {
-    $query = Product::paginate(9);
+    $product_result = Product::paginate(9);
+    $collection_result = Tag::query()->withType('collection')->withCount('products')->get();
 
-    $products = ProductData::collect($query);
+    $products = ProductData::collect($product_result);
+    $collections = ProductCollectionData::collect($collection_result);
     
-    return view('livewire.product-catalog', compact('products'));
+    return view('livewire.product-catalog', compact('products', 'collections'));
   }
 }
