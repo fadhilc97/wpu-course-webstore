@@ -32,9 +32,13 @@
         </button>
       </div>
     </div>
-    <button wire:click="addToCart" type="button"
+    <button wire:loading.attr="disabled" wire:click="addToCart" type="button"
       class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg cursor-pointer gap-x-2 hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
-      Add To Cart
+      <div wire:loading
+        class="animate-spin inline-block size-4 border-2 border-current border-t-transparent text-white rounded-full dark:text-white"
+        role="status" aria-label="loading">
+        <span class="sr-only">Loading...</span>
+      </div> Add To Cart
       <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="m5 11 4-7"></path>
