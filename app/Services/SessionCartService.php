@@ -51,7 +51,7 @@ class SessionCartService implements CartServiceInterface {
     $this->save($cart);
   }
   
-  public function getItemBySku(string $sku): CartItemData{
+  public function getItemBySku(string $sku): ?CartItemData{
     return $this->load()->toCollection()->first(fn(CartItemData $item) => $item->sku === $sku);
   }
   
