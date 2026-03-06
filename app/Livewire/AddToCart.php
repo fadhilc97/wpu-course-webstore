@@ -47,7 +47,11 @@ class AddToCart extends Component
       )
     );
 
+    session()->flash('success', 'Product Added');
+
     $this->dispatch('cart-updated');
+
+    return redirect()->route('cart');
   }
 
   public function render()
