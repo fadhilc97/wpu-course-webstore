@@ -17,12 +17,12 @@
                 </h3>
                 <h2 class="text-sm text-gray-800">{{ $item->product()->short_desc }}</h2>
                 <div class="flex items-center gap-2 my-5">
-
                   <livewire:add-to-cart wire:key="add-to-cart-{{ $item->sku }}" :product="$item->product()" />
 
-                  <p class="px-3 py-2 mt-1 text-xl font-semibold text-black dark:text-black">
+                  <p class="px-3 text-xl font-semibold text-black dark:text-black">
                     {{ $item->product()->price_formatted }}
                   </p>
+                  <livewire:cart-item-remove :product="$item->product()" />
                 </div>
               </div>
             </div>
