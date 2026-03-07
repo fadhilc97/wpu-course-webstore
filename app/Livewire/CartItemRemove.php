@@ -17,7 +17,7 @@ class CartItemRemove extends Component
     public function removeCartItem(CartServiceInterface $cartService) {
         $cartService->remove($this->sku);
 
-        session('success', "Produk {$this->sku} sudah dihapus");
+        session()->flash('success', "Product {$this->sku} already removed");
 
         $this->dispatch('cart-item-removed');
 
