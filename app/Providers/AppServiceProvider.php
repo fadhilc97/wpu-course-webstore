@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Services\SessionCartService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Number;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\ValidationException;
 
@@ -27,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Model::unguard();
+        Number::useCurrency('IDR');
 
         Gate::define('is_stock_available', function(User $user = null) {
             try {
