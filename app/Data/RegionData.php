@@ -1,7 +1,10 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Data;
 
+
+use App\Models\Region;
 use Livewire\Attributes\Computed;
 use Spatie\LaravelData\Data;
 
@@ -20,5 +23,16 @@ class RegionData extends Data
         public string $country = 'indonesia',
     ) {
         $this->label = "$sub_district, $district, $city, $province, $postal_code";
+    }
+
+    public static function fromModel(Region $region): self {
+        return new self(
+           code: $region->code,
+           province: $region->name,
+           city: $region->parent->name,
+           district: $region->parent->parent->name,
+           sub_district: $region->parent->parent->parent->name,
+           postal_code: $region->postal_code
+        );
     }
 }

@@ -1,10 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Livewire;
 
 use App\Contract\CartServiceInterface;
 use App\Data\CartData;
 use App\Data\RegionData;
+use App\Services\RegionQueryService;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Number;
 use Livewire\Component;
@@ -62,45 +64,23 @@ class Checkout extends Component
         return $cart->all();
     }
 
-    public function getRegionProperty(): ?RegionData {
+    public function getRegionProperty(RegionQueryService $region_query_service): ?RegionData {
         $region_code_selected = data_get($this->region_selector, 'region_code_selected');
         if (!$region_code_selected) {
             return null;
         }
 
-        return $this->regions->toCollection()->first(fn(RegionData $region) => $region->code === $region_code_selected);
+        return $region_query_service->searchRegionByCode($region_code_selected);
     }
 
-    public function getRegionsProperty(): DataCollection {
-        $regions = [
-            [
-                'code' => '101',
-                'province' => 'Kepulauan Riau',
-                'city' => 'Batam',
-                'district' => 'Batam Kota',
-                'sub_district' => 'Teluk Tering',
-                'postal_code' => '29661',
-                'country' => 'Indonesia',
-            ],
-            [
-                'code' => '102',
-                'province' => 'Riau',
-                'city' => 'Kepulauan Meranti',
-                'district' => 'Tasik Putri Puyu',
-                'sub_district' => 'Selat Akar',
-                'postal_code' => '30303',
-                'country' => 'Indonesia',
-            ],
-        ];
-
-        if (!data_get($this->region_selector, 'keyword')) {
+    public function getRegionsProperty(RegionQueryService $region_query_service): DataCollection {
+        $keyword = data_get($this->region_selector, 'keyword');
+        if (!$keyword) {
             data_set($this->data, 'destination_region_code', null);
-            $regions = [];
+            return new DataCollection(RegionData::class, []);
         }
 
-        return new DataCollection(
-            RegionData::class, $regions
-        );        
+        return $region_query_service->searchRegionByName($keyword);
     }
 
     public function rules() {
