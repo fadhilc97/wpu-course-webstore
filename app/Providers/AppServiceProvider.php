@@ -7,6 +7,7 @@ use App\Contract\CartServiceInterface;
 use App\Models\User;
 use App\Services\RegionQueryService;
 use App\Services\SessionCartService;
+use App\Services\ShippingMethodService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Number;
@@ -20,8 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-      $this->app->bind(CartServiceInterface::class, SessionCartService::class);
-      $this->app->bind(RegionQueryService::class, RegionQueryService::class);
+        $this->app->bind(CartServiceInterface::class, SessionCartService::class);
+        $this->app->bind(RegionQueryService::class, RegionQueryService::class);
+        $this->app->bind(ShippingMethodService::class, ShippingMethodService::class);
     }
 
     /**
@@ -32,12 +34,14 @@ class AppServiceProvider extends ServiceProvider
         Model::unguard();
         Number::useCurrency('IDR');
 
-        Gate::define('is_stock_available', function(User $user = null) {
+        Gate::define('is_stock_available', function (?User $user = null) {
             try {
                 ValidateCartStock::run();
+
                 return true;
             } catch (ValidationException $error) {
                 session()->flash('error', $error->getMessage());
+
                 return false;
             }
         });

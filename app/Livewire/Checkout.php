@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Livewire;
@@ -6,7 +7,10 @@ namespace App\Livewire;
 use App\Contract\CartServiceInterface;
 use App\Data\CartData;
 use App\Data\RegionData;
+use App\Data\ShippingData;
 use App\Services\RegionQueryService;
+use App\Services\ShippingMethodService;
+use Illuminate\Support\Enumerable;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Number;
 use Livewire\Component;
@@ -19,12 +23,12 @@ class Checkout extends Component
         'email' => null,
         'phone' => null,
         'address_line' => null,
-        'destination_region_code' => null
+        'destination_region_code' => null,
     ];
 
     public array $region_selector = [
         'keyword' => null,
-        'region_code_selected' => null
+        'region_code_selected' => null,
     ];
 
     public array $summaries = [
@@ -33,17 +37,19 @@ class Checkout extends Component
         'shipping_total' => 0,
         'shipping_total_formatted' => '-',
         'grand_total' => 0,
-        'grand_total_formatted' => '-'
+        'grand_total_formatted' => '-',
     ];
 
-    public function mount() {
-        if (!Gate::inspect('is_stock_available')->allowed()) {
+    public function mount()
+    {
+        if (! Gate::inspect('is_stock_available')->allowed()) {
             return redirect()->route('cart');
         }
         $this->calculateTotal();
     }
 
-    public function calculateTotal() {
+    public function calculateTotal()
+    {
         data_set($this->summaries, 'sub_total', $this->cart->total);
         data_set($this->summaries, 'sub_total_formatted', $this->cart->total_formatted);
 
@@ -56,34 +62,58 @@ class Checkout extends Component
         data_set($this->summaries, 'grand_total_formatted', Number::currency($grand_total));
     }
 
-    public function updatedRegionSelectorRegionCodeSelected($value) {
+    public function updatedRegionSelectorRegionCodeSelected($value)
+    {
         data_set($this->data, 'destination_region_code', $value);
     }
 
-    public function getCartProperty(CartServiceInterface $cart): CartData {
+    public function getCartProperty(CartServiceInterface $cart): CartData
+    {
         return $cart->all();
     }
 
-    public function getRegionProperty(RegionQueryService $region_query_service): ?RegionData {
+    public function getRegionProperty(RegionQueryService $region_query_service): ?RegionData
+    {
         $region_code_selected = data_get($this->region_selector, 'region_code_selected');
-        if (!$region_code_selected) {
+        if (! $region_code_selected) {
             return null;
         }
 
         return $region_query_service->searchRegionByCode($region_code_selected);
     }
 
-    public function getRegionsProperty(RegionQueryService $region_query_service): DataCollection {
+    public function getRegionsProperty(RegionQueryService $region_query_service): DataCollection
+    {
         $keyword = data_get($this->region_selector, 'keyword');
-        if (!$keyword) {
+        if (! $keyword) {
             data_set($this->data, 'destination_region_code', null);
+
             return new DataCollection(RegionData::class, []);
         }
 
         return $region_query_service->searchRegionByName($keyword);
     }
 
-    public function rules() {
+    /** @return DataCollection<ShippingData> */
+    public function getShippingMethodsProperty(
+        RegionQueryService $region_query,
+        ShippingMethodService $shipping_service
+    ): DataCollection|Enumerable {
+        if (! data_get($this->data, 'destination_region_code')) {
+            return new DataCollection(ShippingData::class, []);
+        }
+
+        $origin_code = config('shipping.shipping_origin_code');
+
+        return $shipping_service->getShippingMethods(
+            $region_query->searchRegionByCode($origin_code),
+            $region_query->searchRegionByCode(data_get($this->region_selector, 'region_code_selected')),
+            $this->cart
+        )->toCollection()->groupBy('service');
+    }
+
+    public function rules()
+    {
         return [
             'data.full_name' => ['required', 'min:3', 'max:255'],
             'data.email' => ['required', 'email:dns'],
@@ -93,15 +123,17 @@ class Checkout extends Component
         ];
     }
 
-    public function messages() {
+    public function messages()
+    {
         return [
             'required' => 'Required',
             'email' => 'Invalid email',
-            'between' => 'Is not between :min - :max character'
+            'between' => 'Is not between :min - :max character',
         ];
     }
 
-    public function placeAnOrder() {
+    public function placeAnOrder()
+    {
         $this->validate();
         dd($this->data);
     }
@@ -109,7 +141,7 @@ class Checkout extends Component
     public function render()
     {
         return view('livewire.checkout', [
-            'cart' => $this->cart
+            'cart' => $this->cart,
         ]);
     }
 }
