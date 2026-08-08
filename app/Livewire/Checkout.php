@@ -58,6 +58,11 @@ class Checkout extends Component
         if (! Gate::inspect('is_stock_available')->allowed()) {
             return redirect()->route('cart');
         }
+
+        if ($this->cart->total_quantity <= 0) {
+            return redirect()->route('cart');
+        }
+
         $this->calculateTotal();
     }
 
