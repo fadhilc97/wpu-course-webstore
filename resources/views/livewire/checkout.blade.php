@@ -139,7 +139,10 @@
 									@empty
 										<div class="text-xs text-red-600">Fill Shipping Address First</div>
 									@endforelse
-										
+									@error('data.shipping_hash')
+											<p class="mt-2 text-xs text-red-600" id="hs-validation-name-error-helper">
+													{{ $message }}</p>
+									@enderror
 								</div>
 						</div>
 
