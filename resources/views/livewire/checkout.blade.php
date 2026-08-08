@@ -1,4 +1,4 @@
-<div class="container mx-auto max-w-[85rem] w-full px-4 sm:px-6 lg:px-8 py-10">
+<div class="container mx-auto max-w-340 w-full px-4 sm:px-6 lg:px-8 py-10">
 		<div class="grid gap-5 md:gap-20 md:grid-cols-2">
 				<div class="p-10">
 						<!-- Section -->
@@ -11,7 +11,7 @@
 								<div class="grid grid-cols-2 gap-3 mt-2">
 										<div class="col-span-2">
 												<input wire:model="data.full_name" id="af-payment-billing-contact" type="text"
-														class="@error('data.full_name') border-red-600 @enderror py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+														class="@error('data.full_name') border-red-600 @enderror py-1.5 sm:py-2 px-3 pe-11 block w-full shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
 														placeholder="Full Name">
 												@error('data.full_name')
 														<p class="mt-2 text-xs text-red-600" id="hs-validation-name-error-helper">
@@ -20,7 +20,7 @@
 										</div>
 										<div>
 												<input type="text" wire:model="data.email"
-														class="@error('data.email') border-red-600 @enderror py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+														class="@error('data.email') border-red-600 @enderror py-1.5 sm:py-2 px-3 pe-11 block w-full shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
 														placeholder="Email">
 												@error('data.email')
 														<p class="mt-2 text-xs text-red-600" id="hs-validation-name-error-helper">
@@ -29,7 +29,7 @@
 										</div>
 										<div>
 												<input type="text" wire:model="data.phone"
-														class="@error('data.phone') border-red-600 @enderror py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+														class="@error('data.phone') border-red-600 @enderror py-1.5 sm:py-2 px-3 pe-11 block w-full shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
 														placeholder="Phone Number">
 												@error('data.phone')
 														<p class="mt-2 text-xs text-red-600" id="hs-validation-name-error-helper">
@@ -47,7 +47,7 @@
 
 								<div class="mt-2 space-y-3">
 										<input id="af-payment-billing-address" type="text" wire:model="data.address_line"
-												class="@error('data.address_line') border-red-600 @enderror py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+												class="@error('data.address_line') border-red-600 @enderror py-1.5 sm:py-2 px-3 pe-11 block w-full shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
 												placeholder="Street Address">
 										@error('data.address_line')
 												<p class="mt-2 text-xs text-red-600" id="hs-validation-name-error-helper">
@@ -60,7 +60,7 @@
 																		wire:model.live.debounce.500="region_selector.keyword"
 																		class="py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
 																		placeholder="Cari Lokasi">
-																<div wire:loading wire:target="region_selector"
+																<div wire:loading wire:target="region_selector.keyword"
 																		class="animate-spin right-3 top-3 inline-block size-4 border-2 border-current border-t-transparent text-blue-500 rounded-full dark:text-blue-500 absolute"
 																		role="status" aria-label="loading">
 																		<span class="sr-only">Loading...</span>
@@ -103,6 +103,13 @@
 								Shipping Method
 						</label>
 						<div class="mt-2 space-y-3">
+							<div class="w-full text-center">
+								<div wire:loading wire:target="region_selector.region_code_selected"
+										class="animate-spin inline-block size-4 border-2 border-current border-t-transparent text-blue-500 rounded-full dark:text-blue-500"
+										role="status" aria-label="loading">
+										<span class="sr-only">Loading...</span>
+								</div>
+							</div>
 								<div class="grid space-y-2">
 									@forelse ($this->shipping_methods as $group_name => $shipping_method_groups)
 										<div class="text-xs font-bold">
@@ -112,7 +119,7 @@
 											<label for="shipping_method_{{ $shipping_method->hash }}"
 													class="flex items-center justify-between w-full gap-2 p-2 text-sm bg-white border border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
 													<div class="flex items-center justify-start gap-2">
-															<input type="radio" name="shipping_method" value="{{ $shipping_method->hash }}"
+															<input type="radio" wire:model.live="shipping_selector.shipping_method" value="{{ $shipping_method->hash }}"
 																	class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
 																	id="shipping_method_{{ $shipping_method->hash }}">
 																	
@@ -178,10 +185,17 @@
 												class="inline-flex items-center px-4 py-3 -mt-px text-sm text-gray-800 border border-gray-200 gap-x-2 first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:border-neutral-700 dark:text-neutral-200">
 												<div class="flex items-center justify-between w-full">
 														<span class="flex flex-col">
-																<span>Shipping (JNT YES)</span>
-																<span class="text-xs">570 gram</span>
+																<span>{{ $this->shipping_method?->label ?? '-' }}</span>
+																<span class="text-xs">{{ $this->shipping_method?->weight ?? 0 }} gram</span>
 														</span>
-														<span>{{ data_get($this->summaries, 'shipping_total_formatted') }}</span>
+														<div class="flex items-center gap-1">
+															<div wire:loading wire:target="shipping_selector.shipping_method"
+																	class="animate-spin inline-block size-4 border-2 border-current border-t-transparent text-blue-500 rounded-full dark:text-blue-500"
+																	role="status" aria-label="loading">
+																	<span class="sr-only">Loading...</span>
+															</div>
+															<span>{{ data_get($this->summaries, 'shipping_total_formatted') }}</span>
+														</div>
 												</div>
 										</li>
 										<li

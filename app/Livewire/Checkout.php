@@ -24,11 +24,16 @@ class Checkout extends Component
         'phone' => null,
         'address_line' => null,
         'destination_region_code' => null,
+        'shipping_hash' => null,
     ];
 
     public array $region_selector = [
         'keyword' => null,
         'region_code_selected' => null,
+    ];
+
+    public array $shipping_selector = [
+        'shipping_method' => null,
     ];
 
     public array $summaries = [
@@ -53,7 +58,7 @@ class Checkout extends Component
         data_set($this->summaries, 'sub_total', $this->cart->total);
         data_set($this->summaries, 'sub_total_formatted', $this->cart->total_formatted);
 
-        $shipping_cost = 0;
+        $shipping_cost = $this->shippingMethod?->cost ?? 0;
         data_set($this->summaries, 'shipping_total', $shipping_cost);
         data_set($this->summaries, 'shipping_total_formatted', Number::currency($shipping_cost));
 
@@ -110,6 +115,34 @@ class Checkout extends Component
             $region_query->searchRegionByCode(data_get($this->region_selector, 'region_code_selected')),
             $this->cart
         )->toCollection()->groupBy('service');
+    }
+
+    public function getShippingMethodProperty(ShippingMethodService $shipping_service): ?ShippingData
+    {
+        if (
+            empty(data_get($this->data, 'shipping_hash')) ||
+            empty(data_get($this->data, 'destination_region_code'))
+        ) {
+            return null;
+        }
+
+        $data = $shipping_service->getShippingMethod(
+            data_get($this->data, 'shipping_hash')
+        );
+
+        if ($data === null) {
+            $this->addError('shipping_hash', 'Shipping cost missing');
+            redirect()->route('checkout');
+        }
+
+        return $data;
+
+    }
+
+    public function updatedShippingSelectorShippingMethod($value)
+    {
+        data_set($this->data, 'shipping_hash', $value);
+        $this->calculateTotal();
     }
 
     public function rules()
