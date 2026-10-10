@@ -15,6 +15,7 @@ use App\Rules\ValidShippingHash;
 use App\Services\PaymentMethodQueryService;
 use App\Services\RegionQueryService;
 use App\Services\ShippingMethodService;
+use App\Services\CheckoutService;
 use Illuminate\Support\Enumerable;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Number;
@@ -193,7 +194,7 @@ class Checkout extends Component
         ];
     }
 
-    public function placeAnOrder()
+    public function placeAnOrder(CartServiceInterface $cart)
     {
         $validated = $this->validate();
 
@@ -211,7 +212,11 @@ class Checkout extends Component
             'payment' => $payment_method_data
         ]);
 
-        dd($checkout);
+        $service = app(CheckoutService::class);
+        $service->makeAnOrder($checkout);
+        $cart->clear();
+
+        return redirect()->route('order-confirmed', $checkout->trx_id);
     }
 
     public function render()

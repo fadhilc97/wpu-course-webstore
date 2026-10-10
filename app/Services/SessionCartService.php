@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Session;
 
 class SessionCartService implements CartServiceInterface {
   protected string $session_key = 'cart';
-  
+
   protected function load(): DataCollection {
     $raw = Session::get($this->session_key, []);
 
@@ -50,11 +50,15 @@ class SessionCartService implements CartServiceInterface {
 
     $this->save($cart);
   }
-  
+
   public function getItemBySku(string $sku): ?CartItemData{
     return $this->load()->toCollection()->first(fn(CartItemData $item) => $item->sku === $sku);
   }
-  
+
+  public function clear(): void {
+      Session::forget($this->session_key);
+  }
+
   public function all(): CartData{
     return new CartData($this->load());
   }
