@@ -44,6 +44,13 @@ class ProductCatalog extends Component
     ];
   }
 
+  protected function validationAttributes() {
+      return [
+          'selected_collections' => 'Selected Collections',
+          'sort_by' => 'Sort By'
+      ];
+  }
+
   public function applyFilters() {
     $this->validate();
     $this->resetPage();
@@ -99,7 +106,7 @@ class ProductCatalog extends Component
 
     $products = ProductData::collect($product_query->paginate(9));
     $collections = ProductCollectionData::collect($collection_result);
-    
+
     return view('livewire.product-catalog', compact('products', 'collections'));
   }
 }

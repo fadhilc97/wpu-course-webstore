@@ -188,9 +188,21 @@ class Checkout extends Component
     public function messages()
     {
         return [
-            'required' => 'Required',
+            // 'required' => 'Required',
             'email' => 'Invalid email',
             'between' => 'Is not between :min - :max character',
+        ];
+    }
+
+    protected function validationAttributes() {
+        return [
+            'data.full_name' => 'Name',
+            'data.email' => 'Email',
+            'data.phone' => 'Phone',
+            'data.address_line' => 'Address Line',
+            'data.destination_region_code' => 'Region',
+            'data.shipping_hash' => 'Shipping Method',
+            'data.payment_method_hash' => 'Payment Method',
         ];
     }
 

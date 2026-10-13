@@ -122,7 +122,7 @@
 															<input type="radio" wire:model.live="shipping_selector.shipping_method" value="{{ $shipping_method->hash }}"
 																	class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
 																	id="shipping_method_{{ $shipping_method->hash }}">
-																	
+
 															@if ($shipping_method->logo_url)
 																<img src="{{ $shipping_method->logo_url }}" class="h-5" />
 															@endif
@@ -213,9 +213,14 @@
 										</li>
 								</ul>
 								<!-- End List Group -->
-								<button type="button" wire:click="placeAnOrder"
+								<button type="button" wire:click="placeAnOrder" wire:loading.attr="disabled"
 										class="cursor-pointer inline-flex items-center justify-center w-full px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg gap-x-2 hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
 										Place an Order
+										<div wire:loading
+                                            class="animate-spin inline-block size-4 border-2 border-current border-t-transparent text-blue-500 rounded-full dark:text-blue-500"
+                                            role="status" aria-label="loading">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
 								</button>
 						</div>
 				</div>
