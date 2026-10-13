@@ -47,7 +47,7 @@ class PaymentMethodQueryService
         return $this->getDriver($sales_order->payment)->shouldShowPayButton($sales_order);
     }
 
-    public function getRedirectUrl(SalesOrderData $sales_order): string
+    public function getRedirectUrl(SalesOrderData $sales_order): string|null
     {
         return $this->getDriver($sales_order->payment)->getRedirectUrl($sales_order);
     }

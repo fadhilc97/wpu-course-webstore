@@ -225,10 +225,10 @@ class Checkout extends Component
         ]);
 
         $service = app(CheckoutService::class);
-        $service->makeAnOrder($checkout);
+        $order = $service->makeAnOrder($checkout);
         $cart->clear();
 
-        return redirect()->route('order-confirmed', $checkout->trx_id);
+        return redirect()->route('order-confirmed', $order->trx_id);
     }
 
     public function render()
