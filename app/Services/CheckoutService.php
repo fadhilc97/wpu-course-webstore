@@ -10,7 +10,7 @@ use App\Data\CartItemData;
 use App\Models\SalesOrder;
 use App\Models\Product;
 use App\States\SalesOrder\Pending;
-use App\Events\SalesOrderCreated;
+use App\Events\SalesOrderCreatedEvent;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -91,7 +91,7 @@ class CheckoutService {
 
         $data = SalesOrderData::fromModel($sales_order);
 
-        event(new SalesOrderCreated($data));
+        event(new SalesOrderCreatedEvent($data));
 
         return $data;
     }
