@@ -7,6 +7,8 @@ namespace App\States\SalesOrder\Transitions;
 use Spatie\ModelStates\Transition;
 use App\Models\SalesOrder;
 use App\States\SalesOrder\Progress;
+use App\Data\SalesOrderData;
+use App\Events\SalesOrderProgressedEvent;
 
 class PendingToProgress extends Transition {
     public function __construct(
@@ -17,5 +19,11 @@ class PendingToProgress extends Transition {
         $this->sales_order->update([
             'status' => Progress::class
         ]);
+
+        event(
+            new SalesOrderProgressedEvent(
+                SalesOrderData::fromModel($this->sales_order)
+            )
+        );
     }
 }

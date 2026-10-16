@@ -2,7 +2,7 @@
 
 use App\Models\SalesOrder;
 use App\Data\SalesOrderData;
-use App\Mail\SalesOrderCreatedMail;
+use App\Mail\ShippingReceiptNumberUpdatedMail;
 use App\Livewire\Cart;
 use App\Livewire\ProductCatalog;
 use Illuminate\Support\Facades\Route;
@@ -22,5 +22,5 @@ Route::view('/page', 'pages.page')->name('page');
 Route::get('/mailable', function() {
     $latest_sales_order = SalesOrder::latest()->first();
     $latest_sales_order_data = SalesOrderData::from($latest_sales_order);
-    return new SalesOrderCreatedMail($latest_sales_order_data);
+    return new ShippingReceiptNumberUpdatedMail($latest_sales_order_data);
 });

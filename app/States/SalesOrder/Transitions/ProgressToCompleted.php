@@ -7,6 +7,8 @@ namespace App\States\SalesOrder\Transitions;
 use Spatie\ModelStates\Transition;
 use App\Models\SalesOrder;
 use App\States\SalesOrder\Completed;
+use App\Data\SalesOrderData;
+use App\Events\SalesOrderCancelledEvent;
 
 class ProgressToCompleted extends Transition {
     public function __construct(
@@ -17,5 +19,11 @@ class ProgressToCompleted extends Transition {
         $this->sales_order->update([
             'status' => Completed::class
         ]);
+
+        event(
+            new SalesOrdeCancelledEvent(
+                SalesOrderData::fromModel($this->sales_order)
+            )
+        );
     }
 }

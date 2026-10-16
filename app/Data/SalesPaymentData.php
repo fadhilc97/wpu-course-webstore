@@ -11,7 +11,7 @@ class SalesPaymentData extends Data
         public string $driver,
         public string $method,
         public string $label,
-        public array $payload = [],
-        public Carbon|null $paid_at
+        public Carbon|null $paid_at,
+        public array $payload = []
     ) {}
 }
